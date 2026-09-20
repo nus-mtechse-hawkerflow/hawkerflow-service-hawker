@@ -7,7 +7,7 @@ from models.hawker_details import HawkerDetails
 from hawker_service.hawker_service import HawkerService
 
 
-hawker_router = APIRouter(prefix="/v1/src")
+hawker_router = APIRouter(prefix="/v1/hawker")
 
 
 def get_hawker_service(request: Request):
