@@ -10,4 +10,4 @@ class Stalls(SQLModel, table=True):
     f_stall_description: str
 
     stall_menu: list["StallMenu"] = Relationship(back_populates="stall")
-    stall_owner: list["StallOwner"] = Relationship(back_populates="stall")
+    stall_owner: "StallOwner" = Relationship(back_populates="stall")

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class StallMenu(BaseModel):
@@ -8,8 +8,10 @@ class StallMenu(BaseModel):
 
 
 class StallOwner(BaseModel):
+    stall_owner_sub: str
     name: str
     phone: str
+    email: EmailStr
 
 
 class HawkerDetails(BaseModel):

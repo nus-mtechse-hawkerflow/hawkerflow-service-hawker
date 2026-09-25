@@ -12,3 +12,7 @@ class HawkerService:
     def get_all_hawker(self):
         stalls = self._repo.get_all_hawker()
         return stalls
+
+    def get_hawker_by_sub(self, hawker_sub: str):
+        stall = self._repo.get_hawker_by_sub(hawker_sub)
+        return stall

@@ -39,3 +39,18 @@ async def get_stalls(hawker_service: Annotated[HawkerService, Depends(get_hawker
         },
         status_code=200
     )
+
+
+@hawker_router.get("/me/stall/{hawker_sub}")
+async def get_my_stall(
+        hawker_sub: str,
+        hawker_service: Annotated[HawkerService, Depends(get_hawker_service)]
+):
+    stall_detail = hawker_service.get_hawker_by_sub(hawker_sub)
+
+    return JSONResponse(
+        content={
+            **stall_detail
+        },
+        status_code=200
+    )
