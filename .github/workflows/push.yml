@@ -10,6 +10,10 @@ on:
       - main
       - release
 
+permissions:
+  id-token: write # Required for requesting the JWT/OIDC token
+  contents: read
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
