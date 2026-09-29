@@ -1,0 +1,36 @@
+name: "Configure AWS Credentials"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - release
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: PROD
+
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Get AWS Credentials"
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          audience: 'sts.amazonaws.com'
+          aws-region: 'ap-southeast-1'
+          role-to-assume: "${{ secrets.AWS_ROLE_TO_ASSUME }}"
+          role-session-name: "hawkerflow-ecr-role"
+
+      - name: Build, tag, and push docker image to AWS ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }} .
+          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }} ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}
