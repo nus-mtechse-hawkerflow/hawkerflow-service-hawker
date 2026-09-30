@@ -41,5 +41,5 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t hawkerflow/service-hawker .
-          docker tag hawkerflow/service-hawker:latest ${{ env.REGISTRY }}/hawkerflow/service-hawker:${{ env.IMAGE_TAG }}
-          docker push ${{ env.REGISTRY }}/hawkerflow/servie-hawker:${{ env.IMAGE_TAG }}
+          docker tag hawkerflow/service-hawker:latest ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
+          docker push ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
