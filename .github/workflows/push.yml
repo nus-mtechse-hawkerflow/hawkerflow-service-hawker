@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - main
-      - release
   pull_request:
     branches:
-      - main
       - release
 
 permissions:
@@ -18,8 +16,18 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     environment: PROD
-
     steps:
+      - name: "Generate Application Resources"
+        env:
+          DB_HOST_VAR: ${{ vars.DB_HOST }}
+        run: |
+          mvn clean package \
+            -Ddb.host=${{ env.DB_HOST_VAR }} \
+            -Ddb.user=${{ secrets.POSTGRES_USER }} \
+            -Ddb.password=${{ secrets.POSTGRES_SECRET }}
+          
+          echo ${{ env.DB_HOST_VAR }}
+
       - name: "Checkout Repository"
         uses: actions/checkout@v4
 

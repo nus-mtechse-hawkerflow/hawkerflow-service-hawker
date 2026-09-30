@@ -1,0 +1,72 @@
+<project>
+  <groupId>nus-mtech-se</groupId>
+  <artifactId>hawkerflow-service-hawker</artifactId>
+  <version>1.0.0-snapshot</version>
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <properties>
+    <antrun.plugin.version>3.2.0</antrun.plugin.version>
+    <db.host>127.0.0.1</db.host>
+    <db.user>root</db.user>
+    <db.password>root</db.password>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${antrun.plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <!-- Task 1: Config File -->
+                <copy
+                    file="${project.basedir}/templates/config.yml"
+                    tofile="${project.basedir}/target/deployment/resources/config.yml">
+                  <filterset>
+                    <filter token="port" value="8080" />
+                    <filter token="host" value="0.0.0.0" />
+                    <filter token="docs_url" value="/docs" />
+                    <filter token="redoc_url" value="/redoc" />
+                    <filter token="db_host" value="${db.host}" />
+                    <filter token="db_port" value="5432" />
+                    <filter token="package" value="drivers.postgres_driver" />
+                    <filter token="driver_class" value="PostgresDriver" />
+                    <filter token="drivername" value="postgresql" />
+                  </filterset>
+                </copy>
+
+                <!-- Task 2: Postgres User -->
+                <copy
+                    file="${project.basedir}/templates/postgres.user"
+                    tofile="${project.basedir}/target/deployment/vault/postgres.user">
+                  <filterset>
+                    <!-- Fixed: Removed extra '@' wrappers from token attribute -->
+                    <filter token="postgres.user" value="${db.user}" />
+                  </filterset>
+                </copy>
+
+                <!-- Task 3: Postgres Secret -->
+                <copy
+                    file="${project.basedir}/templates/postgres.password"
+                    tofile="${project.basedir}/target/deployment/vault/postgres.password">
+                  <filterset>
+                    <!-- Fixed: Removed extra '@' wrappers from token attribute -->
+                    <filter token="postgres.secret" value="${db.password}" />
+                  </filterset>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
