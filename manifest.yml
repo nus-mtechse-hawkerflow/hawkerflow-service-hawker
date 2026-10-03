@@ -100,9 +100,8 @@ spec:
   selector:
     app: service-hawker
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
-      nodePort: 30080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -114,10 +113,10 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /hawker/docs
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 8080}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
   # Use 'alb' for AWS ALB Controller, or remove/change to 'traefik'/'nginx' if using local k3d ingress
-  ingressClassName: alb
+  ingressClassName: nginx
   rules:
     - http:
         paths:
@@ -127,4 +126,4 @@ spec:
               service:
                 name: service-hawker
                 port:
-                  number: 8080
+                  number: 80
