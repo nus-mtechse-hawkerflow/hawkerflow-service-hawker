@@ -28,9 +28,9 @@ class Service(BaseSettings):
 class Database(BaseSettings):
     connection_url: str
     driver_name: str
-    name: str
-    host: str
-    port: int
+    name: str = os.getenv("DB_NAME", "hawker")
+    host: str = os.getenv("DB_HOST", "localhost")
+    port: int = int(os.getenv("DB_PORT", 5432))
 
 
 class Driver(BaseSettings):
@@ -39,11 +39,9 @@ class Driver(BaseSettings):
 
 
 class DatabaseOptions(BaseSettings):
-    user: SecretStr = Field(alias="postgres.user")
-    password: SecretStr = Field(alias="postgres.password")
-    echo: bool
-
-    model_config = SettingsConfigDict(secrets_dir=Path(os.getenv('PROJECT_ROOT') or ".") / "vault")
+    user: str = os.getenv("DB_USERNAME", "")
+    password: str = os.getenv("DB_PASSWORD", "")
+    echo: bool = False
 
 
 class Datasource(BaseSettings):
