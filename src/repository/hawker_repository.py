@@ -3,9 +3,9 @@ from collections import defaultdict
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 
-from entities.stalls import Stalls
 from entities.stall_menu import StallMenu
 from entities.stall_owner import StallOwner
+from entities.stalls import Stalls
 from models.hawker_details import HawkerDetails
 
 
@@ -62,7 +62,13 @@ class HawkerRepository:
                                 exclude={"f_created_at", "f_updated_at"}
                             ) for menu in stall.stall_menu
                         ],
-                        "stall_owner": [stall.stall_owner.model_dump()]
+                        # This list is public: the owner's email, phone and
+                        # Cognito sub must not be part of it.
+                        "stall_owner": [
+                            stall.stall_owner.model_dump(
+                                include={"f_stall_id", "f_stall_owner_name"}
+                            )
+                        ]
                     }
                 )
 
