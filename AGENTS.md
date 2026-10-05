@@ -27,12 +27,8 @@ Welcome! This document provides essential instructions, architectural context, a
 .
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # CI pipeline (Ruff, Pytest, Pip-Audit, Bandit, Gitleaks, SAM validate)
-├── docs/                        # Specifications, local dev runbooks, proposals, and openapi.yaml
+│       └── ci.yml               # CI pipeline (Ruff, Pytest, Pip-Audit, Bandit, Gitleaks)
 ├── graphify-out/                # Persisted knowledge graph, reports, and visualizer
-├── infra/
-│   ├── SECURITY_BASELINE.md     # Infrastructure security baseline documentation
-│   └── template.yaml            # AWS SAM serverless infrastructure definition
 ├── resources/
 │   └── config.yml               # Application configuration file
 ├── src/
