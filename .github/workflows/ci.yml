@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # Required for requesting the JWT/OIDC token
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
@@ -72,3 +73,40 @@ jobs:
             | tar -xz gitleaks
           sudo install gitleaks /usr/local/bin/gitleaks
       - run: gitleaks detect --source . -v --redact
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: PROD
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Get AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          audience: 'sts.amazonaws.com'
+          aws-region: 'ap-southeast-1'
+          role-to-assume: "${{ secrets.AWS_ROLE_TO_ASSUME }}"
+          role-session-name: "hawkerflow-ecr-role"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to AWS ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t hawkerflow/service-hawker .
+          docker tag hawkerflow/service-hawker:latest ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
+          docker push ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: 'hawkerflow-dev-hawker'
+          service: hawkerflow-dev-hawker
+          cluster: hawkerflow-dev-cluster
+          wait-for-service-stability: true
