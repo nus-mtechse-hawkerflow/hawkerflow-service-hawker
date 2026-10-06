@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements-dev.txt
+      - run: pip install -r requirements.txt
       - run: ruff check .
 
   tests:
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements-dev.txt
+      - run: pip install -r requirements.txt
       - run: pytest -q
 
   pip-audit:
@@ -44,8 +44,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements-dev.txt
-      - run: pip-audit -r requirements-dev.txt
+      - run: pip install -r requirements.txt
+      - run: pip-audit -r requirements.txt
 
   bandit:
     name: bandit
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements-dev.txt
+      - run: pip install -r requirements.txt
       - run: bandit -r src
 
   gitleaks:
@@ -99,9 +99,9 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t hawkerflow/service-hawker .
-          docker tag hawkerflow/service-hawker:latest ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
-          docker push ${{ env.REGISTRY }}/hawkerflow/service-hawker:latest
+          docker build -t hawkerflow-dev/hawker .
+          docker tag hawkerflow-dev/hawker:latest ${{ env.REGISTRY }}/hawkerflow-dev/hawker:latest
+          docker push ${{ env.REGISTRY }}/hawkerflow-dev/hawker:latest
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
