@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write # Required for requesting the JWT/OIDC token
 
 env:
   PYTHON_VERSION: "3.12"
@@ -161,7 +160,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
 
         run: |
-          IMAGE_URI="$REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG"
+          IMAGE_URI="$REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG"
 
           echo "Building image: $IMAGE_URI"
 
