@@ -6,13 +6,12 @@ from fastapi import FastAPI
 from sqlmodel import SQLModel
 
 from configurations.app_config import AppConfig
-from session.db_session import DBSession
-from entities.stall_menu import StallMenu
-from entities.stall_owner import StallOwner
-from entities.stalls import Stalls
+from entities.stall_menu import StallMenu  # noqa: F401
+from entities.stall_owner import StallOwner  # noqa: F401
+from entities.stalls import Stalls  # noqa: F401
 from hawker_service.hawker_service import HawkerService
 from repository.hawker_repository import HawkerRepository
-from session.db_session import DBSession
+from session.db_session import DBSession  # noqa: F401
 
 
 @asynccontextmanager
