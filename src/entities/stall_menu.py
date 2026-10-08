@@ -1,10 +1,13 @@
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from .stalls import Stalls
 
 
 class StallMenu(SQLModel, table=True):
-
     __tablename__ = "stall_menu"
 
     f_stall_id: int = Field(foreign_key="stalls.f_stall_id")

@@ -1,12 +1,11 @@
 import os
 from pathlib import Path
 
-from pydantic import SecretStr, Field
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
     SettingsConfigDict,
-    YamlConfigSettingsSource
+    YamlConfigSettingsSource,
 )
 
 
@@ -54,15 +53,17 @@ class AppConfig(BaseSettings):
     service: Service
     datasource: Datasource
 
-    model_config = SettingsConfigDict(yaml_file=Path((os.getenv('PROJECT_ROOT')) or '.') / 'resources' / "config.yml")
+    model_config = SettingsConfigDict(
+        yaml_file=Path((os.getenv("PROJECT_ROOT")) or ".") / "resources" / "config.yml"
+    )
 
     @classmethod
     def settings_customise_sources(
-            cls,
-            settings_cls: type[BaseSettings],
-            init_settings: PydanticBaseSettingsSource,
-            env_settings: PydanticBaseSettingsSource,
-            dotenv_settings: PydanticBaseSettingsSource,
-            file_secret_settings: PydanticBaseSettingsSource,
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
         return (YamlConfigSettingsSource(settings_cls),)

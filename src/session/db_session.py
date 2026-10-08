@@ -19,10 +19,7 @@ class DBSession:
         """
         if self._engine is None:
             self._get_connection()
-            self._engine = create_engine(
-                self._get_connection(),
-                echo=self._config.options.echo
-            )
+            self._engine = create_engine(self._get_connection(), echo=self._config.options.echo)
 
         return self._engine
 
@@ -39,8 +36,7 @@ class DBSession:
         Loads the database driver and creates a connection URL.
         """
         driver = DatabaseFactory().create_driver(
-            self._config.driver.package,
-            self._config.driver.driver_class
+            self._config.driver.package, self._config.driver.driver_class
         )
 
         return driver(self._config).get_connection()

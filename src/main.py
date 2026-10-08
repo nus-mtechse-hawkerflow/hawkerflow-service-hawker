@@ -1,12 +1,11 @@
-from configurations.app_config import AppConfig
-from endpoints.hawker_routes import hawker_router
-from endpoints.health_routes import health_router
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
+from configurations.app_config import AppConfig
+from endpoints.hawker_routes import hawker_router
+from endpoints.health_routes import health_router
 from lifecycle.lifespan import startup
 
 
@@ -24,12 +23,7 @@ class HawkerFlowCustomer:
         2. Initialise the app with configurations loaded.
         """
 
-        uvicorn.run(
-            self._app,
-            host=self._config.service.host,
-            port=self._config.service.port
-        )
-
+        uvicorn.run(self._app, host=self._config.service.host, port=self._config.service.port)
 
     def _init_app(self):
         """
@@ -40,7 +34,7 @@ class HawkerFlowCustomer:
             docs_url=self._config.service.docs_url,
             redoc_url=self._config.service.redoc_url,
             root_path=self._config.service.root_path,
-            lifespan=startup
+            lifespan=startup,
         )
 
         self._add_middleware()

@@ -1,6 +1,6 @@
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-import os
 
 from fastapi import FastAPI
 from sqlmodel import SQLModel
@@ -12,6 +12,7 @@ from entities.stall_owner import StallOwner
 from entities.stalls import Stalls
 from hawker_service.hawker_service import HawkerService
 from repository.hawker_repository import HawkerRepository
+from session.db_session import DBSession
 
 
 @asynccontextmanager

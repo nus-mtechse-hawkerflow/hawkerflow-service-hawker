@@ -1,4 +1,9 @@
-from sqlmodel import SQLModel, Field, Relationship
+from typing import TYPE_CHECKING
+
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from .stalls import Stalls
 
 
 class StallOwner(SQLModel, table=True):

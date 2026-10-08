@@ -24,7 +24,7 @@ class PostgresDriver(Driver):
                 self._config.options.password,
                 self._config.database.host,
                 self._config.database.port,
-                self._config.database.name
+                self._config.database.name,
             )
 
         return self._connection_url
